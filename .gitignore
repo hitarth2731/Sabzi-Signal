@@ -221,3 +221,5 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# Project data (downloaded by scripts, too large for GitHub)
+data/
