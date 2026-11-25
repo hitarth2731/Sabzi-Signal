@@ -19,7 +19,7 @@ print(f"Key loaded: length {len(API_KEY)}, ends with ...{API_KEY[-4:]}")
 URL = "https://api.data.gov.in/resource/35985678-0d79-46b4-9ed6-6f13308a1d24"
 COMMODITY = "Tomato"
 DATE = "24-10-2026"  # dd-MM-yyyy
-PAGE_SIZE = 100  # rows per request (small = easier for the server)
+PAGE_SIZE = 1000  # rows per request (small = easier for the server)
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36",
     "Accept": "application/json",
