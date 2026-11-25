@@ -13,12 +13,17 @@ load_dotenv()
 API_KEY = os.getenv("DATA_GOV_API")
 if not API_KEY:
     raise SystemExit("API key not found. Check your .env file.")
+print(f"Key loaded: length {len(API_KEY)}, ends with ...{API_KEY[-4:]}")
 
 # 2. Settings: change these to fetch something else
 URL = "https://api.data.gov.in/resource/35985678-0d79-46b4-9ed6-6f13308a1d24"
 COMMODITY = "Tomato"
 DATE = "24-10-2026"  # dd-MM-yyyy
 PAGE_SIZE = 100  # rows per request (small = easier for the server)
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36",
+    "Accept": "application/json",
+}
 
 
 def get_page(offset, retries=3):
@@ -33,7 +38,7 @@ def get_page(offset, retries=3):
     }
     for attempt in range(1, retries + 1):
         try:
-            response = requests.get(URL, params=params, timeout=120)
+            response = requests.get(URL, params=params, headers=HEADERS, timeout=120)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.HTTPError as error:
@@ -70,7 +75,9 @@ df = pd.DataFrame(all_records)
 print(f"\nCollected {len(df)} rows in total")
 print(df.head())
 
-out_dir = Path("data/raw")
+# Build the path from this script's location, so it works from any folder
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+out_dir = PROJECT_ROOT / "data" / "raw"
 out_dir.mkdir(parents=True, exist_ok=True)
 out_file = out_dir / f"{COMMODITY.lower()}_{DATE}.csv"
 df.to_csv(out_file, index=False)
